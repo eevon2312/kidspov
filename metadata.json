@@ -1,0 +1,7 @@
+{
+  "name": "KidsPOV",
+  "description": "A playful mobile app that teaches kids aged 3-6 to pronounce and recognize words in multiple languages by photographing real-world objects.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
