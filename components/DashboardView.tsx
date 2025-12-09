@@ -15,7 +15,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ profile, onStart, 
     <div className="w-full h-full flex flex-col bg-[#F3F6FB]">
       
       {/* Header */}
-      <div className="flex justify-between items-center p-6 bg-transparent">
+      <div className="flex justify-between items-center p-6 pt-8 bg-transparent">
         <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-[#FF8A80] flex items-center justify-center text-white">
                 <span className="font-bold text-lg">🧠</span>
@@ -33,12 +33,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ profile, onStart, 
         </div>
       </div>
 
-      <div className="px-6 pb-6 flex-1 overflow-y-auto">
+      <div className="px-6 pb-28 flex-1 overflow-y-auto">
         
         {/* Greeting */}
         <div className="mb-6 mt-2">
              <h1 className="text-3xl font-bold text-[#37474F] mb-1" style={{ fontFamily: "'Fredoka One', cursive" }}>Hi {profile.name} 👋</h1>
-             <p className="text-gray-500">Ollie's ready to learn something new today!</p>
+             <p className="text-gray-500 text-sm md:text-base">Ollie's ready to learn something new today!</p>
         </div>
 
         {/* Start Learning CTA */}
@@ -53,32 +53,32 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ profile, onStart, 
         <p className="text-gray-400 text-center text-sm mb-8">Every photo helps Ollie grow smarter!</p>
 
         {/* Stats Row */}
-        <div className="flex gap-4 mb-8">
-            <div className="flex-1 bg-white p-4 rounded-3xl shadow-sm flex items-center gap-3">
-                 <div className="p-3 bg-yellow-100 rounded-full text-yellow-500">
-                    <StarIcon className="w-6 h-6" />
+        <div className="flex gap-3 mb-8 overflow-x-auto hide-scrollbar pb-2">
+            <div className="flex-1 min-w-[100px] bg-white p-3 rounded-3xl shadow-sm flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-2 md:gap-3">
+                 <div className="p-2 bg-yellow-100 rounded-full text-yellow-500">
+                    <StarIcon className="w-5 h-5 md:w-6 md:h-6" />
                  </div>
                  <div>
-                    <span className="block font-bold text-xl text-[#37474F]">{profile.coins}</span>
-                    <span className="text-xs text-gray-400">Stars</span>
+                    <span className="block font-bold text-lg md:text-xl text-[#37474F]">{profile.coins}</span>
+                    <span className="text-[10px] md:text-xs text-gray-400 uppercase font-bold tracking-wider">Stars</span>
                  </div>
             </div>
-             <div className="flex-1 bg-white p-4 rounded-3xl shadow-sm flex items-center gap-3">
-                 <div className="p-3 bg-blue-100 rounded-full text-blue-500">
-                    <BookIcon className="w-6 h-6" />
+             <div className="flex-1 min-w-[100px] bg-white p-3 rounded-3xl shadow-sm flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-2 md:gap-3">
+                 <div className="p-2 bg-blue-100 rounded-full text-blue-500">
+                    <BookIcon className="w-5 h-5 md:w-6 md:h-6" />
                  </div>
                  <div>
-                    <span className="block font-bold text-xl text-[#37474F]">32</span>
-                    <span className="text-xs text-gray-400">Words</span>
+                    <span className="block font-bold text-lg md:text-xl text-[#37474F]">32</span>
+                    <span className="text-[10px] md:text-xs text-gray-400 uppercase font-bold tracking-wider">Words</span>
                  </div>
             </div>
-             <div className="flex-1 bg-white p-4 rounded-3xl shadow-sm flex items-center gap-3">
-                 <div className="p-3 bg-red-100 rounded-full text-red-500">
-                    <FireIcon className="w-6 h-6" />
+             <div className="flex-1 min-w-[100px] bg-white p-3 rounded-3xl shadow-sm flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-2 md:gap-3">
+                 <div className="p-2 bg-red-100 rounded-full text-red-500">
+                    <FireIcon className="w-5 h-5 md:w-6 md:h-6" />
                  </div>
                  <div>
-                    <span className="block font-bold text-xl text-[#37474F]">7</span>
-                    <span className="text-xs text-gray-400">Streak</span>
+                    <span className="block font-bold text-lg md:text-xl text-[#37474F]">7</span>
+                    <span className="text-[10px] md:text-xs text-gray-400 uppercase font-bold tracking-wider">Streak</span>
                  </div>
             </div>
         </div>
@@ -98,7 +98,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ profile, onStart, 
         </div>
 
         {/* Badges */}
-        <div className="mb-24">
+        <div className="mb-4">
              <h3 className="font-bold text-[#37474F] mb-4">Your Badges</h3>
              <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar">
                 <div className="flex flex-col items-center gap-2 min-w-[80px]">
@@ -131,14 +131,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ profile, onStart, 
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 w-full bg-white border-t border-gray-100 px-8 py-4 flex justify-between items-center z-50 rounded-t-3xl shadow-[0_-5px_10px_rgba(0,0,0,0.02)]">
+      <div className="fixed bottom-0 w-full bg-white border-t border-gray-100 px-8 py-4 pb-6 flex justify-between items-center z-50 rounded-t-3xl shadow-[0_-5px_10px_rgba(0,0,0,0.02)]">
           <button className="flex flex-col items-center gap-1 text-[#F42C5D]">
               <HomeIcon className="w-6 h-6" />
               <span className="text-[10px] font-bold">Home</span>
           </button>
-           <button onClick={onStart} className="flex flex-col items-center gap-1 -mt-8">
-              <div className="w-14 h-14 bg-[#66D9B0] rounded-full flex items-center justify-center shadow-lg text-white">
-                  <CameraIcon className="w-7 h-7" />
+           <button onClick={onStart} className="flex flex-col items-center gap-1 -mt-10">
+              <div className="w-16 h-16 bg-[#66D9B0] rounded-full flex items-center justify-center shadow-lg text-white border-4 border-[#F3F6FB]">
+                  <CameraIcon className="w-8 h-8" />
               </div>
           </button>
            <button className="flex flex-col items-center gap-1 text-gray-400">

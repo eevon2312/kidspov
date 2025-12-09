@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { CameraIcon, CloseIcon } from './icons';
 
@@ -135,13 +136,13 @@ export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onBack }) => 
 
       <button
         onClick={onBack}
-        className="absolute top-6 right-6 p-2 bg-black/40 text-white rounded-full hover:bg-black/60 focus:outline-none focus:ring-4 focus:ring-white/50 transition-colors backdrop-blur-md z-10"
+        className="absolute top-12 right-6 p-2 bg-black/40 text-white rounded-full hover:bg-black/60 focus:outline-none focus:ring-4 focus:ring-white/50 transition-colors backdrop-blur-md z-10"
         aria-label="Go back"
       >
         <CloseIcon className="w-8 h-8" />
       </button>
 
-      <div className="absolute bottom-10 w-full flex justify-center z-10">
+      <div className="absolute bottom-12 w-full flex justify-center z-10">
         <button
           onClick={handleCaptureClick}
           disabled={!isReady}

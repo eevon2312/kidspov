@@ -143,32 +143,32 @@ export const LearningView: React.FC<LearningViewProps> = ({ image, result, selec
     const percentage = (pronunciationResult as any).percentage || 85;
     
     return (
-        <div className="w-full h-full flex flex-col items-center justify-between p-6 bg-[#F3F6FB] animate-fade-in relative">
-            <button onClick={onGoHome} className="absolute top-6 left-6 p-2 rounded-full bg-white shadow-sm">
+        <div className="w-full h-full flex flex-col items-center justify-between p-6 bg-[#F3F6FB] animate-fade-in relative pt-12">
+            <button onClick={onGoHome} className="absolute top-10 md:top-6 left-6 p-2 rounded-full bg-white shadow-sm z-10">
                 <CloseIcon className="w-6 h-6 text-gray-400" />
             </button>
-            <div className="absolute top-6 right-6 bg-white px-3 py-1 rounded-full shadow-sm flex items-center gap-1">
+            <div className="absolute top-10 md:top-6 right-6 bg-white px-3 py-1 rounded-full shadow-sm flex items-center gap-1 z-10">
                 <StarIcon className="w-4 h-4 text-yellow-400" />
                 <span className="font-bold text-sm">125</span>
             </div>
 
-            <div className="mt-12 flex flex-col items-center">
-                 <div className="w-48 h-48 bg-[#66D9B0]/20 rounded-full flex items-center justify-center mb-6 relative">
-                     <Mascot className="w-32 h-32" color="#FF9A9A" />
+            <div className="flex-1 flex flex-col items-center justify-center w-full">
+                 <div className="w-40 h-40 md:w-48 md:h-48 bg-[#66D9B0]/20 rounded-full flex items-center justify-center mb-6 relative">
+                     <Mascot className="w-28 h-28 md:w-32 md:h-32" color="#FF9A9A" />
                  </div>
                  
-                 <div className="flex items-center gap-2 mb-2">
-                    <span className="text-4xl text-[#FF5252]">🍎</span> 
-                    <h1 className="text-5xl font-bold text-[#37474F]" style={{ fontFamily: "'Fredoka One', cursive" }}>{displayWord}</h1>
+                 <div className="flex items-center gap-2 mb-2 text-center">
+                    <span className="text-3xl md:text-4xl text-[#FF5252]">🍎</span> 
+                    <h1 className="text-4xl md:text-5xl font-bold text-[#37474F] break-words" style={{ fontFamily: "'Fredoka One', cursive" }}>{displayWord}</h1>
                  </div>
 
-                 <div className="flex items-end gap-1 text-[#66D9B0] font-bold" style={{ fontFamily: "'Fredoka One', cursive" }}>
-                    <span className="text-9xl leading-none">{percentage}</span>
-                    <span className="text-4xl mb-2">%</span>
+                 <div className="flex items-end gap-1 text-[#66D9B0] font-bold mt-4" style={{ fontFamily: "'Fredoka One', cursive" }}>
+                    <span className="text-8xl md:text-9xl leading-none">{percentage}</span>
+                    <span className="text-3xl md:text-4xl mb-2">%</span>
                  </div>
                  <p className="text-gray-400 font-medium mb-8">Pronunciation Score</p>
 
-                 <div className="bg-[#FFF9C4] px-6 py-2 rounded-full flex items-center gap-2 mb-4">
+                 <div className="bg-[#FFF9C4] px-6 py-2 rounded-full flex items-center gap-2 mb-4 animate-bounce-small">
                      <StarIcon className="w-5 h-5 text-yellow-500" />
                      <span className="font-bold text-yellow-800">Great Job!</span>
                  </div>
@@ -180,15 +180,15 @@ export const LearningView: React.FC<LearningViewProps> = ({ image, result, selec
                  </div>
             </div>
 
-            <div className="w-full space-y-4">
+            <div className="w-full space-y-4 pb-4">
                 <button 
                     onClick={onReset}
-                    className="w-full bg-[#66D9B0] text-[#1B5E20] py-4 rounded-full font-bold shadow-lg hover:opacity-90 flex items-center justify-center gap-2"
+                    className="w-full bg-[#66D9B0] text-[#1B5E20] py-4 rounded-full font-bold shadow-lg hover:opacity-90 flex items-center justify-center gap-2 transition-transform active:scale-95"
                 >
                     <span>Next Word</span>
                     <ArrowRightIcon className="w-5 h-5" />
                 </button>
-                 <button onClick={playAudio} className="w-full text-center text-gray-400 font-bold flex items-center justify-center gap-2">
+                 <button onClick={playAudio} className="w-full text-center text-gray-400 font-bold flex items-center justify-center gap-2 py-2">
                     <SpeakerIcon className="w-4 h-4" /> Hear it Again
                  </button>
             </div>
@@ -198,84 +198,87 @@ export const LearningView: React.FC<LearningViewProps> = ({ image, result, selec
 
   // Input View
   return (
-    <div className="w-full h-full flex flex-col items-center p-6 bg-[#F3F6FB] animate-fade-in relative">
-        <button onClick={onGoHome} className="absolute top-6 left-6 p-2 rounded-full bg-white shadow-sm">
+    <div className="w-full h-full flex flex-col items-center justify-between p-6 bg-[#F3F6FB] animate-fade-in relative pt-12">
+        <button onClick={onGoHome} className="absolute top-10 md:top-6 left-6 p-2 rounded-full bg-white shadow-sm z-10">
              <CloseIcon className="w-6 h-6 text-gray-400" />
         </button>
-        <div className="absolute top-6 right-6 bg-white px-3 py-1 rounded-full shadow-sm flex items-center gap-1">
+        <div className="absolute top-10 md:top-6 right-6 bg-white px-3 py-1 rounded-full shadow-sm flex items-center gap-1 z-10">
              <StarIcon className="w-4 h-4 text-yellow-400" />
              <span className="font-bold text-sm">125</span>
         </div>
 
-        {/* Mascot Image Card */}
-        <div className="mt-16 w-full max-w-sm aspect-square bg-[#A5D6A7] rounded-3xl relative overflow-hidden shadow-sm flex items-center justify-center">
-             <img src={image} className="absolute inset-0 w-full h-full object-cover opacity-50" alt="background context" />
-             <div className="relative z-10 w-48 h-48 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg">
-                <Mascot className="w-32 h-32" color="#FF9A9A" />
-             </div>
-        </div>
+        {/* Content Container - Flex to center properly */}
+        <div className="flex-1 w-full flex flex-col items-center justify-center min-h-0">
+            {/* Captured Image Card */}
+            <div className="w-full max-w-[280px] md:max-w-sm aspect-square bg-white rounded-3xl relative overflow-hidden shadow-sm flex items-center justify-center border-4 border-white shrink-0">
+                 <img src={image} className="absolute inset-0 w-full h-full object-cover" alt="captured object" />
+            </div>
 
-        {/* Object Icon Placeholder */}
-        <div className="mt-[-40px] z-20 w-24 h-24 bg-white rounded-full shadow-lg flex items-center justify-center border-4 border-[#F3F6FB]">
-             <span className="text-5xl">🍎</span>
-        </div>
+            {/* Object Icon Placeholder */}
+            <div className="mt-[-30px] md:mt-[-40px] z-20 w-20 h-20 md:w-24 md:h-24 bg-white rounded-full shadow-lg flex items-center justify-center border-4 border-[#F3F6FB] shrink-0">
+                 <span className="text-4xl md:text-5xl">🍎</span>
+            </div>
 
-        <h1 className="text-5xl font-bold text-[#37474F] mt-4 mb-2" style={{ fontFamily: "'Fredoka One', cursive" }}>
-            {displayWord}
-        </h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-[#37474F] mt-4 mb-2 text-center" style={{ fontFamily: "'Fredoka One', cursive" }}>
+                {displayWord}
+            </h1>
 
-        <button 
-            onClick={playAudio} 
-            className="w-12 h-12 bg-[#D1EAFA] text-[#29B6F6] rounded-full flex items-center justify-center hover:scale-110 transition-transform"
-        >
-            <SpeakerIcon className="w-6 h-6" />
-        </button>
-
-        {/* Stars Placeholder */}
-        <div className="flex gap-2 mt-6 mb-auto">
-             {[1,2,3,4,5].map(s => <StarIcon key={s} className="w-8 h-8 text-white stroke-2 stroke-gray-300" />)}
-        </div>
-
-        <div className="w-full grid grid-cols-2 gap-4 mt-8">
             <button 
-                onClick={onReset}
-                className="bg-white text-[#37474F] py-4 rounded-full font-bold shadow-sm hover:bg-gray-50"
+                onClick={playAudio} 
+                className="w-12 h-12 bg-[#D1EAFA] text-[#29B6F6] rounded-full flex items-center justify-center hover:scale-110 transition-transform mt-2 shrink-0"
             >
-                Skip
+                <SpeakerIcon className="w-6 h-6" />
             </button>
-            <button 
-                // Toggle recording
-                onPointerDown={startRecording}
-                onPointerUp={stopRecording}
-                onPointerLeave={stopRecording}
-                onTouchStart={startRecording}
-                onTouchEnd={stopRecording}
-                onContextMenu={(e) => e.preventDefault()}
-                disabled={isEvaluating}
-                className={`text-[#1B5E20] py-4 rounded-full font-bold shadow-lg transition-all flex items-center justify-center gap-2 select-none touch-none ${
-                    isRecording 
-                    ? 'bg-red-400 text-white scale-105' 
-                    : isEvaluating 
-                        ? 'bg-gray-300' 
-                        : 'bg-[#66D9B0]'
-                }`}
-            >
-                 {isRecording ? (
-                    <>
-                        <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
-                        <span>Listening...</span>
-                    </>
-                 ) : isEvaluating ? (
-                    <span>Checking...</span>
-                 ) : (
-                    <>
-                        <MicIcon className="w-5 h-5" />
-                        <span>Hold to Speak</span>
-                    </>
-                 )}
-            </button>
+
+            {/* Stars Placeholder */}
+            <div className="flex gap-2 mt-6">
+                 {[1,2,3,4,5].map(s => <StarIcon key={s} className="w-6 h-6 md:w-8 md:h-8 text-white stroke-2 stroke-gray-300" />)}
+            </div>
         </div>
-        <p className="text-xs text-gray-400 mt-4">Hold green button to speak</p>
+
+        {/* Bottom Actions */}
+        <div className="w-full mt-4 pb-4">
+            <div className="grid grid-cols-2 gap-4">
+                <button 
+                    onClick={onReset}
+                    className="bg-white text-[#37474F] py-4 rounded-full font-bold shadow-sm hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                >
+                    Skip
+                </button>
+                <button 
+                    // Toggle recording
+                    onPointerDown={startRecording}
+                    onPointerUp={stopRecording}
+                    onPointerLeave={stopRecording}
+                    onTouchStart={startRecording}
+                    onTouchEnd={stopRecording}
+                    onContextMenu={(e) => e.preventDefault()}
+                    disabled={isEvaluating}
+                    className={`text-[#1B5E20] py-4 rounded-full font-bold shadow-lg transition-all flex items-center justify-center gap-2 select-none touch-none ${
+                        isRecording 
+                        ? 'bg-red-400 text-white scale-105' 
+                        : isEvaluating 
+                            ? 'bg-gray-300' 
+                            : 'bg-[#66D9B0]'
+                    }`}
+                >
+                     {isRecording ? (
+                        <>
+                            <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
+                            <span>Listening...</span>
+                        </>
+                     ) : isEvaluating ? (
+                        <span>Checking...</span>
+                     ) : (
+                        <>
+                            <MicIcon className="w-5 h-5" />
+                            <span>Hold to Speak</span>
+                        </>
+                     )}
+                </button>
+            </div>
+            <p className="text-xs text-center text-gray-400 mt-4">Hold green button to speak</p>
+        </div>
     </div>
   );
 };
