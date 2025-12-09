@@ -9,76 +9,147 @@ interface CameraViewProps {
 export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onBack }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+
     const enableCamera = async () => {
       try {
-        const mediaStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment' },
-        });
-        setStream(mediaStream);
+        let mediaStream: MediaStream;
+        
+        try {
+          // First try to get the environment (rear) camera
+          mediaStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'environment' },
+          });
+        } catch (envError) {
+          console.warn("Could not access environment camera, falling back to default.", envError);
+          // Fallback to any available video source
+          mediaStream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+          });
+        }
+
+        if (!isMounted) {
+          mediaStream.getTracks().forEach((track) => track.stop());
+          return;
+        }
+
+        streamRef.current = mediaStream;
+        
         if (videoRef.current) {
           videoRef.current.srcObject = mediaStream;
+          // Explicitly attempt to play the video to avoid black screens on some devices
+          try {
+            await videoRef.current.play();
+          } catch (playError) {
+            console.error("Error playing video stream:", playError);
+          }
         }
       } catch (err) {
-        console.error("Error accessing camera:", err);
-        setError("Could not access the camera. Please check permissions and try again.");
+        if (isMounted) {
+          console.error("Error accessing camera:", err);
+          setError("Could not access the camera. Please check permissions and try again.");
+        }
       }
     };
+
     enableCamera();
 
     return () => {
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
+      isMounted = false;
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleStreamReady = () => {
+    setIsReady(true);
+  };
+
   const handleCaptureClick = useCallback(() => {
-    if (videoRef.current && canvasRef.current) {
-      const context = canvasRef.current.getContext('2d');
-      if (context) {
-        canvasRef.current.width = videoRef.current.videoWidth;
-        canvasRef.current.height = videoRef.current.videoHeight;
-        context.drawImage(
-          videoRef.current,
-          0,
-          0,
-          videoRef.current.videoWidth,
-          videoRef.current.videoHeight
-        );
-        const imageData = canvasRef.current.toDataURL('image/jpeg');
-        onCapture(imageData);
-      }
+    if (!isReady || !videoRef.current || !canvasRef.current) return;
+
+    const video = videoRef.current;
+    
+    // Ensure video has dimensions
+    if (video.videoWidth === 0 || video.videoHeight === 0) return;
+
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    
+    if (context) {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(
+        video,
+        0,
+        0,
+        video.videoWidth,
+        video.videoHeight
+      );
+      const imageData = canvas.toDataURL('image/jpeg');
+      onCapture(imageData);
     }
-  }, [onCapture]);
+  }, [onCapture, isReady]);
 
   if (error) {
     return (
-      <div className="w-full max-w-lg p-8 bg-white rounded-xl shadow-lg text-center text-red-500">
-        <h2 className="text-xl font-bold mb-4">Camera Error</h2>
-        <p>{error}</p>
+      <div className="w-full h-full flex items-center justify-center p-8 bg-[#FAFAF7]">
+        <div className="w-full max-w-lg p-8 bg-white rounded-3xl shadow-lg text-center text-[#E57373] border border-black/5">
+          <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: "'Fredoka One', cursive" }}>Camera Error</h2>
+          <p className="mb-6">{error}</p>
+          <button 
+            onClick={onBack}
+            className="px-6 py-3 bg-[#666666] text-white font-bold rounded-xl shadow-lg hover:opacity-90 transition-transform transform active:scale-95"
+          >
+            Go Back
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full h-full relative bg-slate-900 flex items-center justify-center">
-      <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover" />
+    <div className="w-full h-full relative bg-slate-900 flex items-center justify-center overflow-hidden">
+      <video 
+        ref={videoRef} 
+        autoPlay 
+        playsInline 
+        muted
+        onLoadedMetadata={handleStreamReady}
+        onCanPlay={handleStreamReady}
+        className={`w-full h-full object-cover transition-opacity duration-500 ${isReady ? 'opacity-100' : 'opacity-0'}`} 
+      />
+
+      {!isReady && (
+         <div className="absolute inset-0 flex items-center justify-center flex-col gap-4">
+            <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+            <p className="text-white font-medium animate-pulse">Starting camera...</p>
+         </div>
+      )}
+
       <button
         onClick={onBack}
-        className="absolute top-6 right-6 p-2 bg-white/80 text-[#111111] rounded-full hover:bg-white focus:outline-none focus:ring-4 focus:ring-white/50 transition-colors backdrop-blur-sm"
+        className="absolute top-6 right-6 p-2 bg-black/40 text-white rounded-full hover:bg-black/60 focus:outline-none focus:ring-4 focus:ring-white/50 transition-colors backdrop-blur-md z-10"
         aria-label="Go back"
       >
         <CloseIcon className="w-8 h-8" />
       </button>
-      <div className="absolute bottom-8 w-full flex justify-center">
+
+      <div className="absolute bottom-10 w-full flex justify-center z-10">
         <button
           onClick={handleCaptureClick}
-          className="p-4 bg-[#2E7D57] text-white rounded-full shadow-lg border-4 border-white/50 hover:bg-opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2E7D57]/50 transition-transform transform hover:scale-110 active:scale-100"
+          disabled={!isReady}
+          className={`p-4 bg-[#2E7D57] text-white rounded-full shadow-lg border-4 border-white/50 focus:outline-none focus:ring-4 focus:ring-[#2E7D57]/50 transition-all transform ${
+            isReady 
+              ? 'hover:bg-opacity-90 hover:scale-110 active:scale-100 cursor-pointer opacity-100' 
+              : 'opacity-50 cursor-not-allowed scale-95'
+          }`}
           aria-label="Capture photo"
         >
           <CameraIcon className="w-12 h-12" />

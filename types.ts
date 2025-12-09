@@ -1,3 +1,4 @@
+
 export interface Language {
   name: string;
   code: string;
@@ -8,13 +9,35 @@ export type Translations = Record<string, string>;
 
 export interface RecognitionResult {
   translations: Translations | null;
+  identifiedObject: string; // The English name for internal reference
+}
+
+export interface PronunciationResult {
+  score: number; // 1 to 3
+  feedback: string;
+}
+
+export interface Profile {
+  id: string;
+  name: string;
+  coins: number;
+  dailyGoal: number; // Number of words to learn
+  dailyProgress: number;
+  avatar: string; // Emoji or simple id
+  // New fields from onboarding
+  ageGroup?: string;
+  gender?: string;
+  targetLanguages?: string[]; // codes
+  motivation?: string;
 }
 
 export enum AppStateEnum {
-  HOME = 'HOME',
+  ONBOARDING = 'ONBOARDING',
+  PROFILE_SELECT = 'PROFILE_SELECT',
+  DASHBOARD = 'DASHBOARD',
   CAMERA = 'CAMERA',
   LOADING = 'LOADING',
-  RESULT = 'RESULT',
+  LEARNING = 'LEARNING',
   ERROR = 'ERROR',
 }
 

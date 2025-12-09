@@ -1,7 +1,8 @@
 {
-  "name": "KidsPOV",
-  "description": "A playful mobile app that teaches kids aged 3-6 to pronounce and recognize words in multiple languages by photographing real-world objects.",
+  "name": "Povkids",
+  "description": "A camera-based language learning app for kids and teens. Point, shoot, and speak to learn new words in top global languages.",
   "requestFramePermissions": [
-    "camera"
+    "camera",
+    "microphone"
   ]
 }
