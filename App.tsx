@@ -171,6 +171,9 @@ const App: React.FC = () => {
                 profile={currentProfile} 
                 onStart={handleStart} 
                 onChangeProfile={handleSwitchProfile}
+                languages={SUPPORTED_LANGUAGES}
+                selectedLanguage={selectedLanguage}
+                onSelectLanguage={setSelectedLanguage}
             />
         );
       case AppStateEnum.CAMERA:
@@ -183,7 +186,9 @@ const App: React.FC = () => {
             <LearningView
               image={capturedImage}
               result={recognitionResult}
+              languages={SUPPORTED_LANGUAGES}
               selectedLanguage={selectedLanguage}
+              onSelectLanguage={setSelectedLanguage}
               onReset={handleReset}
               onGoHome={handleBackToDashboard}
               onComplete={handleLearningComplete}
@@ -199,12 +204,19 @@ const App: React.FC = () => {
     }
   };
 
+  // Only show the global header when NOT on the dashboard OR Learning view (to prevent double headers/UI clashes)
+  const showHeader = appState !== AppStateEnum.PROFILE_SELECT && 
+                     appState !== AppStateEnum.ONBOARDING && 
+                     appState !== AppStateEnum.DASHBOARD && 
+                     appState !== AppStateEnum.LEARNING &&
+                     currentProfile;
+
   return (
     <div className="h-screen w-screen overflow-hidden flex flex-col text-[#111111]" style={{ fontFamily: "'Inter', sans-serif" }}>
-      {appState !== AppStateEnum.PROFILE_SELECT && appState !== AppStateEnum.ONBOARDING && currentProfile && (
+      {showHeader && (
         <Header 
-            coins={currentProfile.coins} 
-            showLanguageSelector={appState !== AppStateEnum.DASHBOARD && appState !== AppStateEnum.LOADING}
+            coins={currentProfile!.coins} 
+            showLanguageSelector={appState !== AppStateEnum.LOADING}
         >
             <LanguageSelector
             languages={SUPPORTED_LANGUAGES}

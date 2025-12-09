@@ -1,5 +1,22 @@
+
 import { GoogleGenAI, Modality } from '@google/genai';
 import type { RecognitionResult, PronunciationResult } from '../types';
+
+// Map for fallback if AI returns language names instead of codes
+const CODE_MAP: Record<string, string> = {
+    'english': 'en-US',
+    'spanish': 'es-ES',
+    'chinese': 'zh-CN',
+    'mandarin': 'zh-CN',
+    'malay': 'ms-MY',
+    'hindi': 'hi-IN',
+    'arabic': 'ar-XA',
+    'french': 'fr-FR',
+    'portuguese': 'pt-BR',
+    'russian': 'ru-RU',
+    'japanese': 'ja-JP',
+    'german': 'de-DE'
+};
 
 export const identifyObjectAndTranslate = async (ai: GoogleGenAI, base64Image: string): Promise<RecognitionResult> => {
   const imagePart = {
@@ -14,10 +31,10 @@ export const identifyObjectAndTranslate = async (ai: GoogleGenAI, base64Image: s
   2. Respond with ONLY a valid JSON object. 
   3. The JSON object must have:
      - 'identifiedObject': The English name of the object.
-     - 'translations': A dictionary where keys are language codes and values are the translation.
+     - 'translations': A dictionary where keys are strictly the 11 supported language codes and values are the translation.
   
-  Language codes to support:
-  en-US (English), es-ES (Spanish), zh-CN (Chinese), ms-MY (Malay), hi-IN (Hindi), ar-XA (Arabic), fr-FR (French), pt-BR (Portuguese), ru-RU (Russian), ja-JP (Japanese), de-DE (German).
+  REQUIRED Language Codes (keys must match exactly):
+  "en-US", "es-ES", "zh-CN", "ms-MY", "hi-IN", "ar-XA", "fr-FR", "pt-BR", "ru-RU", "ja-JP", "de-DE"
 
   Example Response format:
   {
@@ -38,7 +55,7 @@ export const identifyObjectAndTranslate = async (ai: GoogleGenAI, base64Image: s
   }
   
   If you cannot identify a clear object, respond with: {"translations": null, "identifiedObject": null}
-  Do not wrap your response in markdown backticks.`;
+  Do not wrap your response in markdown backticks. Return raw JSON.`;
 
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash',
@@ -54,6 +71,25 @@ export const identifyObjectAndTranslate = async (ai: GoogleGenAI, base64Image: s
   
   try {
     const result = JSON.parse(text);
+    // Normalize keys to ensure robustness (AI might occasionally return different casing or names)
+    if (result.translations) {
+        const normalizedTranslations: Record<string, string> = {};
+        Object.keys(result.translations).forEach(key => {
+            const val = result.translations[key];
+            
+            // 1. Exact match
+            normalizedTranslations[key] = val;
+            
+            // 2. Lowercase match
+            normalizedTranslations[key.toLowerCase()] = val;
+
+            // 3. Name-to-Code Map match
+            if (CODE_MAP[key.toLowerCase()]) {
+                normalizedTranslations[CODE_MAP[key.toLowerCase()]] = val;
+            }
+        });
+        result.translations = normalizedTranslations;
+    }
     return result as RecognitionResult;
   } catch(e) {
     console.error("Failed to parse JSON from Gemini response:", text);

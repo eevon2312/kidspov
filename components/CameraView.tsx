@@ -100,7 +100,7 @@ export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onBack }) => 
 
   if (error) {
     return (
-      <div className="w-full h-full flex items-center justify-center p-8 bg-[#FAFAF7]">
+      <div className="w-full h-[100dvh] flex items-center justify-center p-8 bg-[#FAFAF7]">
         <div className="w-full max-w-lg p-8 bg-white rounded-3xl shadow-lg text-center text-[#E57373] border border-black/5">
           <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: "'Fredoka One', cursive" }}>Camera Error</h2>
           <p className="mb-6">{error}</p>
@@ -116,7 +116,7 @@ export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onBack }) => 
   }
 
   return (
-    <div className="w-full h-full relative bg-slate-900 flex items-center justify-center overflow-hidden">
+    <div className="w-full h-[100dvh] relative bg-slate-900 flex items-center justify-center overflow-hidden">
       <video 
         ref={videoRef} 
         autoPlay 
@@ -134,21 +134,23 @@ export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onBack }) => 
          </div>
       )}
 
+      {/* Close Button - positioned below status bar */}
       <button
         onClick={onBack}
-        className="absolute top-12 right-6 p-2 bg-black/40 text-white rounded-full hover:bg-black/60 focus:outline-none focus:ring-4 focus:ring-white/50 transition-colors backdrop-blur-md z-10"
+        className="absolute top-12 left-6 p-2 bg-black/40 text-white rounded-full hover:bg-black/60 focus:outline-none focus:ring-4 focus:ring-white/50 transition-colors backdrop-blur-md z-20"
         aria-label="Go back"
       >
         <CloseIcon className="w-8 h-8" />
       </button>
 
-      <div className="absolute bottom-12 w-full flex justify-center z-10">
+      {/* Capture Button - positioned comfortably at bottom */}
+      <div className="absolute bottom-16 w-full flex justify-center z-20 pointer-events-none">
         <button
           onClick={handleCaptureClick}
           disabled={!isReady}
-          className={`p-4 bg-[#2E7D57] text-white rounded-full shadow-lg border-4 border-white/50 focus:outline-none focus:ring-4 focus:ring-[#2E7D57]/50 transition-all transform ${
+          className={`pointer-events-auto p-4 bg-[#2E7D57] text-white rounded-full shadow-lg border-4 border-white/50 focus:outline-none focus:ring-4 focus:ring-[#2E7D57]/50 transition-all transform ${
             isReady 
-              ? 'hover:bg-opacity-90 hover:scale-110 active:scale-100 cursor-pointer opacity-100' 
+              ? 'hover:bg-opacity-90 active:scale-95 cursor-pointer opacity-100 scale-100' 
               : 'opacity-50 cursor-not-allowed scale-95'
           }`}
           aria-label="Capture photo"
